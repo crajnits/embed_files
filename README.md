@@ -35,9 +35,7 @@ FetchContent_MakeAvailable(embed_files)
 2. Create an embed_files target with a list of files to embed. This will generate a static library:
 
 ```cmake
-embed_files(
-  TARGET matmul_kernel
-  NAMESPACE matmul
+embed_files(matmul_kernel
   FILES matmul_kernel_1.cl matmul_kernel_2.cl
 )
 ```
@@ -53,26 +51,24 @@ target_link_libraries(matmul
 4. Now, you can include the generated header in your source file and retrieve the data pointer, size, and name of the embedded files:
 
 ```cpp
+#include <iostream>
 #include "matmul_kernel.h"
 
-// ...
-
 int main() {
-  // ...
-
-  // Number of files.
+  // Number of files embed in "matmul_kernel" target.
   auto n_files = MatmulKernelFileCount();  // 2
-  // First file.
-  auto kernel_1 = MatmulKernelGetFiles()[0];
-  // Resource name, the same as provided in the embed_files CMake target.
-  auto kernel_1_name = kernel_1.path;  // "matmul_kernel_1.cl"
-  // Starting address of file content. explicitly null-terminated character array.
-  auto kernel_1_data = kernel_1.data;
-  // Total file size.
-  auto kernel_1_size = kernel_1.size;
-
+  std::cout << "Number of files: " << n_files << std::endl;
+  // first file handle.
+  auto file = MatmulKernelGetFiles()[0];
+  // file name, the same as provided in the embed_files CMake target.
+  std::cout << "FileName: " << file.path << std::endl;  // "matmul_kernel_1.cl"
+  // Total File size.
+  std::cout << "FileSize: " << file.size << std::endl;
+  // Starting address of file content. explicitly null-terminated char array.
+  char* file_data = file.data;
+  // ... use the file data ...
+  std::cout << file.data << std::endl;
   // ... other code ...
-
   return 0;
 }
 ```
