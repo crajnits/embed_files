@@ -106,13 +106,13 @@ ${namespace_start}
 
 struct ${prefix}FileView {
     const char* path;
-    const char* data;
+    const uint8_t* data;
     size_t size;
 };
 
 const ${prefix}FileView* ${prefix}GetFiles();
 
-int ${prefix}FileCount();
+int ${prefix}GetFileCount();
 
 ${namespace_end}
 )";
@@ -136,7 +136,7 @@ const ${prefix}FileView* ${prefix}GetFiles() {
   return files;
 }
 
-int ${prefix}FileCount() {
+int ${prefix}GetFileCount() {
   return sizeof(files) / sizeof(*files);
 }
 
@@ -144,14 +144,14 @@ ${namespace_end}
 )";
 
 const char* kDataTemplate =
-    R"(const char kData${idx}[] = {
+    R"(const uint8_t kData${idx}[] = {
 ${data_lines}
 };
 
 )";
 
 const char* kFileViewTemplate =
-    R"(  {"${path}", kData${idx}, sizeof(kData${idx})},
+    R"(  {"${path}", kData${idx}, sizeof(kData${idx}) - 1},
 )";
 
 int main(int argc, char** argv) {
@@ -212,23 +212,24 @@ int main(int argc, char** argv) {
       std::printf("[ERROR]: %s open failed\n", filepath.c_str());
       return -1;
     }
-    char buffer[12] = {};
+    uint8_t buffer[12] = {};
     std::stringstream lines;
     while (!file.eof()) {
-      file.read(buffer, sizeof(buffer));
+      file.read((char*)buffer, sizeof(buffer));
       auto bytes_read = static_cast<int>(file.gcount());
       // first char.
       if (bytes_read)
         lines << "  0x" << std::hex << std::setfill('0') << std::setw(2)
-              << (int)buffer[0];
+              << static_cast<int>(buffer[0]);
       for (auto i = 1; i < (bytes_read - 1); ++i)
         lines << ", 0x" << std::hex << std::setfill('0') << std::setw(2)
-              << (int)buffer[i];
+              << static_cast<int>(buffer[i]);
       // last char.
       if (bytes_read)
         lines << ", 0x" << std::hex << std::setfill('0') << std::setw(2)
-              << (int)buffer[bytes_read - 1] << ",\n";
+              << static_cast<int>(buffer[bytes_read - 1]) << ",\n";
     }
+    // explicit null-terminate.
     lines << "  0x00";
     KeyMap data_map{
         {"${idx}", std::to_string(idx)},

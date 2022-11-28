@@ -4,7 +4,7 @@
 
 int main() {
   // Number of files embed in "matmul_kernel" target.
-  auto n_files = MatmulKernelFileCount();  // 1
+  auto n_files = MatmulKernelGetFileCount();  // 1
   std::cout << "Number of files: " << n_files << std::endl;
   // first file handle.
   auto file = MatmulKernelGetFiles()[0];
@@ -13,7 +13,7 @@ int main() {
   // Total File size.
   std::cout << "FileSize: " << file.size << std::endl;
   // Starting address of file content. explicitly null-terminated char array.
-  char* file_data = file.data;
+  const uint8_t* file_data = file.data;
   // ... use the file data ...
   std::cout << file.data << std::endl;
   // ... other code ...

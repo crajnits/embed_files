@@ -52,11 +52,11 @@ target_link_libraries(matmul
 
 ```cpp
 #include <iostream>
-#include "matmul_kernel.h"
+#include "matmul_kernel.h"  // Generated header file.
 
 int main() {
   // Number of files embed in "matmul_kernel" target.
-  auto n_files = MatmulKernelFileCount();  // 2
+  auto n_files = MatmulKernelGetFileCount();  // 2
   std::cout << "Number of files: " << n_files << std::endl;
   // first file handle.
   auto file = MatmulKernelGetFiles()[0];

@@ -82,8 +82,9 @@ function(embed_files target_name)
     endif()
 
     # Get the prefix.
-    set(PREFIX "${EMBED_PREFIX}")
-    if("${PREFIX}" STREQUAL "")
+    if(DEFINED EMBED_PREFIX)
+        set(PREFIX "${EMBED_PREFIX}")
+    else()
         set(PREFIX "${target_name}")
     endif()
     string(MAKE_C_IDENTIFIER "${PREFIX}" PREFIX)
