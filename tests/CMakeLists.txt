@@ -26,3 +26,6 @@ target_link_libraries(embed_files_test
     PRIVATE image::file
     PRIVATE GTest::gtest_main
 )
+
+include(GoogleTest)
+gtest_discover_tests(embed_files_test)
