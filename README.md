@@ -6,43 +6,37 @@ The tool has no external dependencies and can be used on virtually any platform 
 
 ## Getting Started
 
-To get started with this project:
-
-1. Clone the project to your local machine:
-
-```bash
-git clone https://github.com/crajnits/embed_files.git
-```
-
-Add the embed_files project to your CMake project:
+Let's update your `CMakeLists.txt` file to add the following lines to get started with this project:
 
 ```cmake
+project(your_project)
+
+# 1. Clone the project to your local machine:
+# git clone https://github.com/crajnits/embed_files.git
+# Add the embed_files project to your project:
 include(path/to/embed_files/embed_files.cmake)
-```
 
-Alternatively, you can use CMake FetchContent to clone and add the embed_files project to your CMake project:
+# Alternatively, you can use CMake FetchContent to clone and add the embed_files
+# project to your CMake project:
+#
+# include(FetchContent)
+# FetchContent_Declare(
+#     embed_files
+#     GIT_REPOSITORY https://github.com/crajnits/embed_files.git
+#     GIT_TAG HEAD # or replace with commit hash.
+# )
+# FetchContent_MakeAvailable(embed_files)
 
-```cmake
-include(FetchContent)
-FetchContent_Declare(
-    embed_files
-    GIT_REPOSITORY https://github.com/crajnits/embed_files.git
-    GIT_TAG HEAD # or replace with commit hash.
-)
-FetchContent_MakeAvailable(embed_files)
-```
-
-2. Create an embed_files target with a list of files to embed. This will generate a static library:
-
-```cmake
+# 2. Create an embed_files target with a list of files to embed.
+# This will generate a static library:
 embed_files(matmul_kernel
   FILES matmul_kernel_1.cl matmul_kernel_2.cl
 )
-```
 
-3. Link the generated static library to your CMake target:
+# ... other code ...
+# ... Your target defination, eg matmul target.
 
-```cmake
+# 3. Link the generated static library to your CMake target:
 target_link_libraries(matmul
   PRIVATE matmul_kernel
 )
@@ -73,7 +67,8 @@ int main() {
 }
 ```
 
-See the [examples](examples) directory for examples of how to use this project.
+For documentation on the `embed_files()` CMake function, please refer to [embed_files.cmake](embed_files.cmake#L17) file.
+For examples of how to use this project, see the [examples](examples) directory.
 
 ## Contributing
 
