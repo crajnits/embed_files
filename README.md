@@ -1,3 +1,5 @@
+![Build Status](https://github.com/crajnits/embed_files/actions/workflows/main.yml/badge.svg)
+
 # Embed Files
 
 CMake and C++ based tool to embed resources, such as data, images, or source files such as shaders or OpenCL kernels, into a library at compile time. The generated header provides functions to access the embedded resources, eliminating the need to read them from storage at runtime.
